@@ -1,11 +1,10 @@
 from aiohttp import web
 from aiohttp_swagger import swagger_path
-from app.currency.serializers.conversionSerializer import ConversionSerializer
+from app.serializers.conversionSerializer import ConversionSerializer
 from schematics.exceptions import DataError
 
 
 class ConversionController(web.View):
-    @swagger_path("swagger/convert_currency.yaml")
     async def get(self):
         try:
             urlParams = dict(self.request.rel_url.query)

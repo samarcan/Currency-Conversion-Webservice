@@ -1,5 +1,5 @@
 import pytest
-from app.currency.serializers.conversionSerializer import ConversionSerializer
+from app.serializers.conversionSerializer import ConversionSerializer
 from schematics.exceptions import DataError
 
 testIncorrectData = [
