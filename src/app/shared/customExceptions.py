@@ -1,0 +1,2 @@
+class APIDataProviderException(Exception):
+    pass
