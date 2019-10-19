@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import Dict
+from typing import Dict, Optional
 
 
 class CurrencyExchange:
@@ -8,17 +8,20 @@ class CurrencyExchange:
         self._value = value
 
     @property
-    def currency(self):
+    def currency(self) -> Optional[str]:
         return self._currency
 
     @property
-    def value(self):
+    def value(self) -> Optional[Decimal]:
         return self._value
 
     def toDict(self) -> Dict:
         return {"currency": self.currency, "value": self.value}
 
-    def fromDict(self, dictEntity):
+    def fromDict(self, dictEntity) -> CurrencyExchange:
         self._currency = dictEntity["currency"]
         self._value = dictEntity["value"]
         return self
+
+    def __eq__(self, entity) -> bool:
+        return self.value == entity.value and self.currency == entity.currency
