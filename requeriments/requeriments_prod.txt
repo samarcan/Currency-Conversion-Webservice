@@ -1,0 +1,5 @@
+aiohttp==3.6.2
+aiohttp-swagger==1.0.9
+schematics==2.1.0
+celery==4.3.0
+redis==3.3.11

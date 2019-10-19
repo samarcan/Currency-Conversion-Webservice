@@ -1,0 +1,14 @@
+black==19.3b0
+mypy==0.701
+mypy-extensions==0.4.2
+mypyls==0.1
+pre-commit==1.18.3
+pycodestyle==2.5.0
+pytest==5.2.1
+PyYAML==5.1.2
+aiohttp==3.6.2
+aiohttp-swagger==1.0.9
+schematics==2.1.0
+celery==4.3.0
+redis==3.3.11
+fakeredis==1.0.5
