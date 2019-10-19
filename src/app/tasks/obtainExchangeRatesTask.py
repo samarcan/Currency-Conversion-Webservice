@@ -1,0 +1,2 @@
+def obtainExchangeRatesTask():
+    print("Hello")
