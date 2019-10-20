@@ -1,9 +1,10 @@
 import json
 from decimal import Decimal
-from typing import Dict
+from typing import Dict, List
 from urllib import request
 
 import settings
+from app.entities.currencyExchangeEntity import CurrencyExchange
 from app.shared.customExceptions import APIDataProviderException
 
 
@@ -13,16 +14,17 @@ class ExchangeRateDataProvider:
         self.urlBase = settings.OER_URL
         self.appId = settings.OER_APP_ID
 
-    def obtainData(self) -> Dict[str, Decimal]:
+    def obtainData(self) -> List[CurrencyExchange]:
         resp = self.__requestAPI(path="/latest.json")
-        return self.__filterByCurrencies(resp)
+        data = self.__filterByCurrencies(resp)
+        return [CurrencyExchange().fromDict(dictCurrency) for dictCurrency in data]
 
-    def __filterByCurrencies(self, resp: Dict) -> Dict:
+    def __filterByCurrencies(self, resp: Dict) -> List[Dict]:
         try:
-            return {
-                currency: Decimal(resp["rates"][currency])
+            return [
+                {"currency": currency, "value": Decimal(resp["rates"][currency])}
                 for currency in self.allowedCurrencies
-            }
+            ]
         except KeyError as e:
             raise APIDataProviderException(
                 "Not found currency: %s in API response." % e.args[0]

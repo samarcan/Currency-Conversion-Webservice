@@ -3,6 +3,7 @@ from unittest import mock
 
 import pytest
 from app.data_providers.APIs.exchangeRate import ExchangeRateDataProvider
+from app.entities.currencyExchangeEntity import CurrencyExchange
 from app.shared.customExceptions import APIDataProviderException
 
 
@@ -21,7 +22,12 @@ def test_exchangeCorrectRate(urlopenMocked):
     )
     dataProvider = ExchangeRateDataProvider()
     data = dataProvider.obtainData()
-    assert data == {"EUR": 1, "USD": 1, "PLN": 1, "CZK": 1}
+    assert data == [
+        CurrencyExchange(currency="EUR", value=1),
+        CurrencyExchange(currency="USD", value=1),
+        CurrencyExchange(currency="PLN", value=1),
+        CurrencyExchange(currency="CZK", value=1),
+    ]
 
 
 @mock.patch("urllib.request.urlopen")
