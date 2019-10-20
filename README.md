@@ -1,9 +1,17 @@
 # Currency-Conversion-Webservice
 
-This project consists of the development of a webservice that provides an endpoint for the conversion between different currencies.
+This project consists of the development of a webservice that provides an endpoint for the conversion between different currencies. Exchange rates are scheduled to be updated daily by obtaining information from: [openexchangerates.org](https://openexchangerates.org/).
+
+
+## Technical specifications
 
 La versión de python usada en este proyecto es `Python 3.7`.
 
+The webservice is developed with the framework `aiohttp`.  To handle asynchronous tasks `celery` has been used as python framework and `Redis` as message broker.  To store the data of the exchanges rates obtained daily, `Redis` has been used, storing in disk a backup each time this data is updated.
+
+In this project the architecture that has been tried to follow has been 'The clean Architecture'.
+
+![alt text](assets/clean_architecture.png "Clean Architecture")
 
 ## How to run services
 
