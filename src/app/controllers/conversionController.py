@@ -1,5 +1,4 @@
 from aiohttp import web
-from aiohttp_swagger import swagger_path
 from app.serializers.conversionSerializer import ConversionSerializer
 from app.use_cases.conversion import Conversion
 from schematics.exceptions import DataError

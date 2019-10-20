@@ -1,0 +1,69 @@
+---
+swagger: "2.0"
+info:
+  title: Currency conversion webservice
+  version: "0.1"
+produces:
+  - application/json
+paths:
+  /convert-currency:
+    get:
+      summary: Currency conversion
+      parameters:
+        - name: initial_currency
+          in: query
+          required: true
+          description: Initial currency you want change.
+          type: string
+          enum: [USD, EUR, PLN, CZK]
+        - name: final_currency
+          in: query
+          required: true
+          description: Currency to which you want to change.
+          type: string
+          enum: [USD, EUR, PLN, CZK]
+        - name: amount
+          in: query
+          required: true
+          description: Amount of money to be changed.
+          type: number
+          format: float
+          minimum: 0
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Currency conversion result
+          schema:
+            type: object
+            properties:
+              base_currency:
+                type: string
+                enum: [USD, EUR, PLN, CZK]
+                example: USD
+              initial_currency:
+                type: string
+                enum: [USD, EUR, PLN, CZK]
+                example: EUR
+              initial_currency_exchange_rate:
+                type: number
+                format: float
+                example: 0.9
+              final_currency:
+                type: string
+                enum: [USD, EUR, PLN, CZK]
+                example: USD
+              final_currency_exchange_rate:
+                type: number
+                format: float
+                example: 1
+              initial_amount:
+                type: number
+                format: float
+                example: 1
+              conversion_result:
+                type: number
+                format: float
+                example: 1.12
+        "400":
+          description: "Input parameters error"
