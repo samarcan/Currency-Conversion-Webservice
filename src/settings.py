@@ -11,7 +11,7 @@ WEBSERVICE_NAME = "currency_exchange_webservice"
 CELERY_WORKER_NAME = "currency_exchange_celery"
 
 # Redis
-REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
 REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
 
 # OpenExchangeRate
