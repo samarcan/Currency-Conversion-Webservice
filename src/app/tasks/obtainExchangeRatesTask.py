@@ -1,2 +1,6 @@
+from app.use_cases.updateCurrencyExchanges import UpdateCurrencyExchanges
+
+
 def obtainExchangeRatesTask():
-    print("Hello")
+    uce = UpdateCurrencyExchanges()
+    uce.update()
