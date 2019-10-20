@@ -3,7 +3,7 @@ services:
   redis:
     image: redis
     volumes:
-      - ./:/data
+      - ./redis_data_storage:/data
   celery-worker:
     build: .
     env_file:
