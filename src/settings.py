@@ -1,5 +1,6 @@
 import os
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 SERVER_PORT = os.environ.get("SERVER_PORT", 8080)
 ALLOWED_CURRENCIES = ["EUR", "USD", "PLN", "CZK"]
 BASE_CURRENCY = "USD"
