@@ -18,7 +18,7 @@ class CurrencyExchange:
     def toDict(self) -> Dict:
         return {"currency": self.currency, "value": self.value}
 
-    def fromDict(self, dictEntity) -> CurrencyExchange:
+    def fromDict(self, dictEntity):
         self._currency = dictEntity["currency"]
         self._value = dictEntity["value"]
         return self
