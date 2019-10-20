@@ -5,6 +5,12 @@ import pytest
 from app.data_providers.APIs.exchangeRate import ExchangeRateDataProvider
 from app.entities.currencyExchangeEntity import CurrencyExchange
 from app.shared.customExceptions import APIDataProviderException
+from app.shared.logger import getAppLogger
+
+
+@pytest.fixture
+def logger():
+    return getAppLogger("test_exchangeRate")
 
 
 def mockUrlopen(responseData, responseCode=None):
@@ -16,11 +22,11 @@ def mockUrlopen(responseData, responseCode=None):
 
 
 @mock.patch("urllib.request.urlopen")
-def test_exchangeCorrectRate(urlopenMocked):
+def test_exchangeCorrectRate(urlopenMocked, logger):
     urlopenMocked.return_value = mockUrlopen(
         responseData={"rates": {"EUR": 1, "USD": 1, "PLN": 1, "CZK": 1}}
     )
-    dataProvider = ExchangeRateDataProvider()
+    dataProvider = ExchangeRateDataProvider(logger)
     data = dataProvider.obtainData()
     assert data == [
         CurrencyExchange(currency="EUR", value=1),
@@ -31,23 +37,23 @@ def test_exchangeCorrectRate(urlopenMocked):
 
 
 @mock.patch("urllib.request.urlopen")
-def test_exchangeFailRate(urlopenMocked):
+def test_exchangeFailRate(urlopenMocked, logger):
     urlopenMocked.return_value = mockUrlopen(
         responseData={"rates": {"EUR": 1, "PLN": 1, "CZK": 1}}
     )
-    dataProvider = ExchangeRateDataProvider()
+    dataProvider = ExchangeRateDataProvider(logger)
     with pytest.raises(APIDataProviderException) as excinfo:
         data = dataProvider.obtainData()
     assert "Not found currency: USD in API response." == str(excinfo.value)
 
 
 @mock.patch("urllib.request.urlopen")
-def test_exchangeFailStatusCode(urlopenMocked):
+def test_exchangeFailStatusCode(urlopenMocked, logger):
     urlopenMocked.return_value = mockUrlopen(
         responseData={"rates": {"EUR": 1, "USD": 1, "PLN": 1, "CZK": 1}},
         responseCode=500,
     )
-    dataProvider = ExchangeRateDataProvider()
+    dataProvider = ExchangeRateDataProvider(logger)
     with pytest.raises(APIDataProviderException) as excinfo:
         data = dataProvider.obtainData()
     assert "Http status error." == str(excinfo.value)

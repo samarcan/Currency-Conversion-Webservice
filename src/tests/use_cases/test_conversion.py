@@ -4,19 +4,25 @@ from unittest import mock
 import pytest
 from app.entities.currencyExchangeEntity import CurrencyExchange
 from app.shared.customExceptions import RedisDataProviderException
+from app.shared.logger import getAppLogger
 from app.use_cases.conversion import Conversion
+
+
+@pytest.fixture
+def logger():
+    return getAppLogger("test_conversion")
 
 
 @mock.patch(
     "app.data_providers.redis.currencyExchangeRedis.CurrencyStorageRedis.getCurrency"
 )
-def test_correctConversion(mockRedisGetCurrency):
+def test_correctConversion(mockRedisGetCurrency, logger):
     mockRedisGetCurrency.side_effect = [
         CurrencyExchange(currency="USD", value=Decimal("1")),
         CurrencyExchange(currency="EUR", value=Decimal("0.895656")),
         CurrencyExchange(currency="CZK", value=Decimal("22.9534")),
     ]
-    result = Conversion().convertCurrency("EUR", "CZK", Decimal(1))
+    result = Conversion(logger).convertCurrency("EUR", "CZK", Decimal(1))
     assert result == {
         "base_currency": "USD",
         "initial_currency": "EUR",
@@ -31,12 +37,12 @@ def test_correctConversion(mockRedisGetCurrency):
 @mock.patch(
     "app.data_providers.redis.currencyExchangeRedis.CurrencyStorageRedis.getCurrency"
 )
-def test_failConversion(mockRedisGetCurrency):
+def test_failConversion(mockRedisGetCurrency, logger):
     mockRedisGetCurrency.side_effect = [
         CurrencyExchange(currency="USD", value=Decimal("1")),
         CurrencyExchange(currency="EUR", value=Decimal("0.895656")),
         RedisDataProviderException("Currency does not exist."),
     ]
     with pytest.raises(RedisDataProviderException) as excinfo:
-        result = Conversion().convertCurrency("EUR", "OOO", Decimal(1))
+        result = Conversion(logger).convertCurrency("EUR", "OOO", Decimal(1))
     assert "Currency does not exist." == str(excinfo.value)

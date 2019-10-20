@@ -12,6 +12,7 @@ class CurrencyStorageRedis(RedisInterface):
         if value:
             return CurrencyExchange(currency=currency, value=Decimal(value.decode()))
         else:
+            self.logger.error("Currency does not exist in Redis")
             raise RedisDataProviderException("Currency does not exist.")
 
     def setCurrency(self, ce: CurrencyExchange):

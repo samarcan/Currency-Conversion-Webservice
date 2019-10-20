@@ -3,7 +3,8 @@ from redis import Redis
 
 
 class RedisInterface:
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
         self._conn = self.connect()
 
     def setKey(self, key, value):
@@ -16,4 +17,7 @@ class RedisInterface:
         self._conn.bgsave()
 
     def connect(self):
-        return Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+        try:
+            return Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+        except Exception:
+            self.logger.critical("Cannot connect to redis server.")

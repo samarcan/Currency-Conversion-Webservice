@@ -8,8 +8,9 @@ from app.shared.customExceptions import RedisDataProviderException
 
 
 class Conversion:
-    def __init__(self):
-        self._currencyStorage = CurrencyStorageRedis()
+    def __init__(self, logger):
+        self._logger = logger
+        self._currencyStorage = CurrencyStorageRedis(self._logger)
         self._baseCurrency = self.__getExchangeRate(settings.BASE_CURRENCY)
 
     def convertCurrency(

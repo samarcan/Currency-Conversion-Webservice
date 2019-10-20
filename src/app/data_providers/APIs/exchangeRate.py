@@ -6,13 +6,15 @@ from urllib import request
 import settings
 from app.entities.currencyExchangeEntity import CurrencyExchange
 from app.shared.customExceptions import APIDataProviderException
+from app.shared.logger import getAppLogger
 
 
 class ExchangeRateDataProvider:
-    def __init__(self):
-        self.allowedCurrencies = settings.ALLOWED_CURRENCIES
-        self.urlBase = settings.OER_URL
-        self.appId = settings.OER_APP_ID
+    def __init__(self, logger):
+        self._logger = logger
+        self._allowedCurrencies = settings.ALLOWED_CURRENCIES
+        self._urlBase = settings.OER_URL
+        self._appId = settings.OER_APP_ID
 
     def obtainData(self) -> List[CurrencyExchange]:
         resp = self.__requestAPI(path="/latest.json")
@@ -23,7 +25,7 @@ class ExchangeRateDataProvider:
         try:
             return [
                 {"currency": currency, "value": Decimal(resp["rates"][currency])}
-                for currency in self.allowedCurrencies
+                for currency in self._allowedCurrencies
             ]
         except KeyError as e:
             raise APIDataProviderException(
@@ -32,10 +34,11 @@ class ExchangeRateDataProvider:
 
     def __requestAPI(self, path: str) -> Dict:
         url = "{urlBase}{path}?app_id={appId}".format(
-            urlBase=self.urlBase, path=path, appId=self.appId
+            urlBase=self._urlBase, path=path, appId=self._appId
         )
         response = request.urlopen(url)
         if response.getcode() == 200:
             return json.loads(response.read())
         else:
+            self._logger.critical("API provicer return error!")
             raise APIDataProviderException("Http status error.")
