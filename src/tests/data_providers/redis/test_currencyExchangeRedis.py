@@ -5,6 +5,7 @@ import fakeredis
 import pytest
 from app.data_providers.redis.currencyExchangeRedis import CurrencyStorageRedis
 from app.entities.currencyExchangeEntity import CurrencyExchange
+from app.shared.customExceptions import RedisDataProviderException
 
 
 @pytest.fixture
@@ -22,8 +23,9 @@ def test_getCurrencyExchangeRedis(mockRedisConnection, fakeRedisClient):
     currencyStorageRedis = CurrencyStorageRedis()
     currency = currencyStorageRedis.getCurrency("EUR")
     assert currency == CurrencyExchange("EUR", Decimal("2.22"))
-    currency = currencyStorageRedis.getCurrency("OPL")
-    assert currency == None
+    with pytest.raises(RedisDataProviderException) as excinfo:
+        currency = currencyStorageRedis.getCurrency("OPL")
+    assert "Currency does not exist." == str(excinfo.value)
 
 
 @mock.patch(

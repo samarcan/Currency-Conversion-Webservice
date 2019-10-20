@@ -8,11 +8,13 @@ class CurrencyExchange:
         self._value = value
 
     @property
-    def currency(self) -> Optional[str]:
+    def currency(self) -> str:
+        assert self._currency is not None
         return self._currency
 
     @property
-    def value(self) -> Optional[Decimal]:
+    def value(self) -> Decimal:
+        assert self._value is not None
         return self._value
 
     def toDict(self) -> Dict:
