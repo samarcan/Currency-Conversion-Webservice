@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  redis:
+    image: redis
+    volumes:
+      - ./:/data
+  celery-worker:
+    build: .
+    env_file:
+      - ./settings-variables.env
+    entrypoint: celery
+    command: "-A runCeleryWorker worker -B"
+  werbservice:
+    build: .
+    env_file:
+      - ./settings-variables.env
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+      - celery-worker
