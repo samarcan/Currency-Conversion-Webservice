@@ -5,13 +5,19 @@ This project consists of the development of a webservice that provides an endpoi
 
 ## Technical specifications
 
-La versión de python usada en este proyecto es `Python 3.7`.
+The python version used in this project is `Python 3.7`.
 
 The webservice is developed with the framework `aiohttp`.  To handle asynchronous tasks `celery` has been used as python framework and `Redis` as message broker.  To store the data of the exchanges rates obtained daily, `Redis` has been used, storing in disk a backup each time this data is updated.
 
-In this project the architecture that has been tried to follow has been 'The clean Architecture'.
+The architecture of this project is defined by the following components:
 
-![alt text](assets/clean_architecture.png "Clean Architecture")
+* `controllers`: Receive the request and validate the data with a serializer, send the information to the corresponding use_case and return the answer to the user.
+* `data_providers`: these modules are in charge of managing the data providers that the application has, in this case the API of OpenExchangeRates and Redis.
+* `entities`: models that represent the information with which the application operates.
+* `serializers`: Modules in charge of the validation of the input data.
+* `tasks`: Celery tasks.
+* `use_cases`: These modules have the business logic of the application.
+* `routes.py`: file where API paths are defined and related to a controller.
 
 ## How to run services
 
